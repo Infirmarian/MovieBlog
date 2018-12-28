@@ -23,7 +23,7 @@ class BlogForm extends React.Component{
 		});
 	}
 
-	updateContent = (e) => {
+	updateReview = (e) => {
 		this.setState({
 			movieReview: e.target.value
 		});
@@ -62,8 +62,23 @@ class BlogForm extends React.Component{
 
 	}
 
+	function isValidRating(evt)
+	{
+		var charCode = (evt.which) ? evt.which : event.keyCode
+		if (charCode >= 48 && charCode <= 53)
+			return true;
+		return false;
+	}
+
 	render() {
-		return(
+		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
+        const titlePH = 'Title';
+        const reviewPH = 'Review';
+        const ratingPH = 'Rating (0-5)';
+        const onBlurShowPH = (ph) => {
+            return (e) => { e.target.placeholder = ph; };
+        };
+		return (
 			<div>
 				<div className="blog-form">
 				<input
@@ -72,16 +87,26 @@ class BlogForm extends React.Component{
 					onFocus={onFocusHidePH}
 					onBlur={onBlurShowPH(titlePH)}
 					onChange={this.updateTitle}
-					value={this.state.title}
+					value={this.state.movieTitle}
 				/>
 				<textarea
-					className="content-in custom-in"
-					placeholder={contentPH}
+					className="review-in custom-in"
+					placeholder={reviewPH}
 					onFocus={onFocusHidePH}
-					onBlur={onBlurShowPH(titlePH)}
+					onBlur={onBlurShowPH(reviewPH)}
 					rows="30"
-					onChange={this.updateContent}
-					value={this.state.content}
+					onChange={this.updateReview}
+					value={this.state.movieReview}
+				/>
+				<input
+					type="number"
+					onkeypress="return isValidRating(event)"
+					className="rating-in custom-in"
+					placeholder={ratingPH}
+					onFocus={onFocusHidePH}
+					onBlur={onBlurShowPH(ratingPH)}
+					onChange={this.updateReview}
+					value={this.state.rating}
 				/>
 				<button
 					className="send-btn"
