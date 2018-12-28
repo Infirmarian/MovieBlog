@@ -31,6 +31,15 @@ const addPost = async (post) => {
     }
 };
 // TODO: Write a function that deletes a post from the database using a fetch
+const deletePost = async (post) => {
+    const resp = await fetch(APIURL, {
+        method: 'delete'
+    })
+    .then(response => response.json());
+    if(!resp.ok) {
+        throwError(resp);
+    }
+};
 
 export {
     //getPosts,

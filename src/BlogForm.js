@@ -2,11 +2,13 @@ import React from 'react';
 import './BlogForm.css';
 import * as api from './api';
 
+//This is where user enters their data (popup where they specify movie, rating, etc)
 // TODO: add BlogForm component
 
 const initState = {
-	title: '',
-	content: ''
+	movieTitle: '',
+	movieReview: '',
+	rating: 0
 }
 
 class BlogForm extends React.Component{
@@ -17,18 +19,24 @@ class BlogForm extends React.Component{
 
 	updateTitle = (e) => {
 		this.setState({
-			title: e.target.value
+			movieTitle: e.target.value
 		});
 	}
 
 	updateContent = (e) => {
 		this.setState({
-			content: e.target.value
+			movieReview: e.target.value
+		});
+	}
+
+	updateRating = (e) => {
+		this.setState({
+			rating: e.target.value
 		});
 	}
 
 	newPost = () => {
-		const {title, content} = this.state;
+		const {movieTitle, movieReview, rating} = this.state;
 		if(title === ''){
 			alert('Title is empty');
 			return;
@@ -39,8 +47,9 @@ class BlogForm extends React.Component{
 		}
 
 		const newPost = {
-			title, 
-			body: content
+			movieTitle, 
+			body: movieReview,
+			rating
 		};
 
 		try {
