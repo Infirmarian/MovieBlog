@@ -72,8 +72,8 @@ class BlogForm extends React.Component{
 
 	render() {
 		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
-        const titlePH = 'Title';
-        const reviewPH = 'Review';
+        const titlePH = 'Movie Title';
+        const reviewPH = 'Add Review';
         const ratingPH = 'Rating (0-5)';
         const onBlurShowPH = (ph) => {
             return (e) => { e.target.placeholder = ph; };
@@ -105,7 +105,7 @@ class BlogForm extends React.Component{
 					placeholder={ratingPH}
 					onFocus={onFocusHidePH}
 					onBlur={onBlurShowPH(ratingPH)}
-					onChange={this.updateReview}
+					onChange={this.updateRating}
 					value={this.state.rating}
 				/>
 				<button

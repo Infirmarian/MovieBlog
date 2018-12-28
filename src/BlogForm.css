@@ -20,7 +20,7 @@
     outline: none;
 }
 
-.content-in{
+.review-in{
     font-size: 17px;
     font-family: 'Courier New', Courier, monospace;
     width: 80%;
@@ -31,6 +31,12 @@
     margin: 20px;
     width: 80%;
     font-family: 'Merriweather', sans-serif;
+}
+
+.rating-in{
+    font-size: 17px;
+    width: 40px;
+    height: 40px;
 }
 
 .send-btn{
