@@ -10,7 +10,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.static(__dirname + '/public'));
 
-
+/////////////////////////////////////////////////////
+/////// User authentication (login, logout, register)
+/////////////////////////////////////////////////////
 app.post("/auth/login", async (req, res) => {
     var hpwd = md5(req.body.password);
     var un = req.body.username.toLowerCase();
@@ -34,7 +36,8 @@ app.post("/auth/login", async (req, res) => {
         res.status(403).json({"ErrorCode":"Invalid Request"});
     }
 });
-
+// register a new user
+// returns a non-zero ErrorStatus if there was an issue
 app.post("/auth/register", async (req, res)=>{
     var hpwd = md5(req.body.password);
     var un = req.body.username.toLowerCase();
@@ -50,13 +53,30 @@ app.post("/auth/register", async (req, res)=>{
         console.log("Error registering user: "+e);
     }
 });
-
-//logs a user out
+// logs a user out
+// invalidates a logged in user by removing their token from the database
 app.post("/auth/logout", async (req, res)=>{
-    var un = req.body.username;
-    await firebase.logout(un);
+    var token = req.body.token;
+    await firebase.logout(token);
     res.status(200).json({"logged out":true});
 });
+
+/////////////////////////////////////////////////////
+//////// Post Creation and Modification
+/////////////////////////////////////////////////////
+// Takes in a JSON object {"token":token, "title":title, "body":body, "imgURL":imgURL}
+app.post("/create_post", async (req, res) =>{
+    var token = req.body.token;
+    var auth_result = firebase.isValidToken(token)
+    if(!auth_result.valid){
+        res.status(401).json({"ErrorCode":1, "ErrorMessage":"Invalid token was passed in, please log in again"})
+    }
+    var user = auth_result.username;
+    var body = req.body.body;
+    var imgURL = req.body.imgURL;
+
+});
+
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}!`);

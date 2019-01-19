@@ -10,7 +10,7 @@ function renderData(){
     }
 }
 function logout(){
-    if(getCookie("username") !== null){
+    if(getCookie("token") !== null){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = () =>{
             if(xhttp.readyState == 4){
@@ -22,7 +22,7 @@ function logout(){
         }
         xhttp.open("POST", "/auth/logout", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(`username=${getCookie("username")}`);
+        xhttp.send(`token=${getCookie("token")}`);
     }
 }
 
