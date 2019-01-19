@@ -24,6 +24,7 @@ class Review extends React.Component{
       <div>
         <h2>{title}</h2>
         <p>{review}</p>
+        <p>Next</p>
       </div>
     )
   }
