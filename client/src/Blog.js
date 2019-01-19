@@ -19,7 +19,6 @@ const showFormStyle = {
     top: '0'
 };
 
-
 class Blog extends React.Component {
     constructor() {
         super();

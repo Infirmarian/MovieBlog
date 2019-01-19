@@ -16,7 +16,9 @@ const throwError = async (resp) => {
 };
 
 // TODO: Write a function that gets all of the posts from the database using a fetch
-
+const getPosts = async () => {
+    
+}
 // TODO: Write a function that adds a new post to the database using a fetch
 const addPost = async (post) => {
     const resp = await fetch(APIURL, {
@@ -42,7 +44,7 @@ const deletePost = async (post) => {
 };
 
 export {
-    //getPosts,
+    getPosts,
     addPost,
-    // deletePost
+    deletePost
 };
