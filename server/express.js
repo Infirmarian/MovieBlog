@@ -19,9 +19,8 @@ app.get("/express_backend", (req, res) => {
 /////// User authentication (login, logout, register)
 /////////////////////////////////////////////////////
 // Expected input: {"username":username, "password":password}
-// Output: {"access_token":token, "token_type":"bearer", "expires_in":int, "username":username}
+// Output: {"ok":true, "access_token":token, "token_type":"bearer", "expires_in":int, "username":username}
 app.post("/auth/login", async (req, res) => {
-    console.log(req.body.key);
     var hpwd = md5(req.body.password);
     var un = req.body.username.toLowerCase();
     try{
@@ -37,11 +36,12 @@ app.post("/auth/login", async (req, res) => {
                 "access_token":token,
                 "token_type":"bearer",
                 "expires_in":exp,
-                "username":un
+                "username":un,
+                "ok":true
             });
         }else{
             console.log("Incorrect username and password");
-            res.status(403).json({"ErrorCode":"Invalid Request"});
+            res.status(403).json({"ok":false});
         }
     }catch (e){
         console.log(`Error logging in user ${un}`);
@@ -82,6 +82,7 @@ app.post("/create_post", async (req, res) =>{
     var auth_result = firebase.isValidToken(token)
     if(!auth_result.valid){
         res.status(401).json({"ok":false, "ErrorCode":1, "ErrorMessage":"Invalid token was passed in, please log in again"})
+        return;
     }
     var user = auth_result.username;
     var body = req.body.body;
