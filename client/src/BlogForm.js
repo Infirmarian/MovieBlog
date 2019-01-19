@@ -37,12 +37,12 @@ class BlogForm extends React.Component{
 
 	newPost = () => {
 		const {movieTitle, movieReview, rating} = this.state;
-		if(movieTitle === ''){
+		if(title === ''){
 			alert('Title is empty');
 			return;
 		} 
-		if (movieReview === ' ') {
-			alert('Review is empty');
+		if (content === ' ') {
+			alert('Content is empty');
 			return;
 		}
 
@@ -61,15 +61,15 @@ class BlogForm extends React.Component{
 		}
 
 	}
-	/*
-	isValidRating(evt)
+
+	function isValidRating(evt)
 	{
 		var charCode = (evt.which) ? evt.which : event.keyCode
 		if (charCode >= 48 && charCode <= 53)
 			return true;
 		return false;
 	}
-*/
+
 	render() {
 		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
         const titlePH = 'Movie Title';
@@ -100,7 +100,7 @@ class BlogForm extends React.Component{
 				/>
 				<input
 					type="number"
-					//onkeypress="return isValidRating(event)"
+					onkeypress="return isValidRating(event)"
 					className="rating-in custom-in"
 					placeholder={ratingPH}
 					onFocus={onFocusHidePH}
