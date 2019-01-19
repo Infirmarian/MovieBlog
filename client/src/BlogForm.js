@@ -62,14 +62,13 @@ class BlogForm extends React.Component{
 
 	}
 
-	isValidRating(evt)
+	isValidNumber(evt) 
 	{
-		var charCode = (evt.which) ? evt.which : event.keyCode
-		if (charCode >= 48 && charCode <= 53)
+		var charCode = (evt.which) ? evt.which : evt.keyCode
+		if (charCode >= 46 && charCode <= 53)
 			return true;
 		return false;
-	};
-
+	}
 	render() {
 		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
         const titlePH = 'Movie Title';
