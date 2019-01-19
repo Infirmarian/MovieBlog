@@ -38,18 +38,17 @@ async function validUser(u, p){
     }
   }
 }
-//TODO:
-async function logout(u){
-  var docRef = db.collection("tokens").doc(u);
+async function logout(token){
+  var docRef = db.collection("tokens").doc(token);
   docRef.delete().then(function() {
-    console.log("Document successfully deleted!");
+    console.log("Token successfully deleted!");
 }).catch(function(error) {
     console.error("Error removing document: ", error);
 });
 }
 
 async function addTempToken(token, user, exp){
-  var docRef = db.collection("tokens").doc(user);
+  var docRef = db.collection("tokens").doc(token);
   docRef.set({
     user,
     token,
@@ -66,9 +65,26 @@ async function addReviewToDatabase(user, title, review, rating, img_url) {
       img_url:img_url,
       creationTime: FieldValue.serverTimestamp()
     });
+    var userdocRef = db.collection("users").doc(user);
+
+
     return docRef.path;
 }
+// returns {valid:true, username:username} if token is valid, and 
+// {valid:false} otherwise
+async function isValidToken(token){
+  var docRef = db.collection("tokens").doc(token);
+  const doc = await docRef.get();
+  if(!doc.exists){
+    return {"valid":false};
+  }
+  const {expiration, user} = doc.data();
+  if(expiration < Date.now()){
+    return {"valid":false};
+  }
+  return {"valid":true, "username":user};
 
+}
 
 async function getReview(reviewID){
   //TODO
@@ -79,5 +95,6 @@ module.exports = {
   validUser,
   logout,
   addTempToken,
-  addReviewToDatabase
+  addReviewToDatabase,
+  isValidToken
 }
