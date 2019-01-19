@@ -56,17 +56,16 @@ async function addTempToken(token, user, exp){
   })
 }
 
-async function addReviewToDatabase(user, title, review, rating, img_url) {
+async function addReviewToDatabase(user, title, review, rating) {
     var docRef = db.collection('reviews').doc();
     var setReturn = docRef.set({
       title: title,
       review: review,
       rating: rating,
-      img_url:img_url,
       creationTime: FieldValue.serverTimestamp()
     });
     var userdocRef = db.collection("users").doc(user);
-
+    
 
     return docRef.path;
 }
