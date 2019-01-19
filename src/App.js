@@ -14,7 +14,6 @@ class Review extends React.Component{
     };
   }
 
-  
 
 
 
