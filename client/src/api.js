@@ -1,5 +1,5 @@
 const APIURL = '/posts';
-
+const getURL = '/get_post';
 const throwError = async (resp) => {
     const unknownErr = { errorMessage: 'Unknown error' };
     try {
@@ -16,7 +16,15 @@ const throwError = async (resp) => {
 };
 
 // TODO: Write a function that gets all of the posts from the database using a fetch
-
+const getPosts = async () => {
+    const resp = await fetch(getURL, {
+        method: 'get',
+        title: JSON.stringify(title)
+    })
+    if(!resp.ok) {
+        throwError(resp);
+    }
+}
 // TODO: Write a function that adds a new post to the database using a fetch
 const addPost = async (post) => {
     const resp = await fetch(APIURL, {
@@ -24,7 +32,7 @@ const addPost = async (post) => {
         headers: new Headers({
             'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(post)
+        body: JSON.stringify(post)
         });
     if(!resp.ok) {
         throwError(resp);
