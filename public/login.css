@@ -3,6 +3,34 @@
     color: red;
 }
 
-.title{
-    width: 
+.heading{
+    font-family: 'Merriweather', serif;
+    font-size: 40;
+    color: blue;
 }
+
+.subheading{
+    font-family: 'Merriweather', serif;
+    font-size: 20;
+    color: blue;
+}
+
+.input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  a{
+    color: #2CBBBB;
+  }
+
+  body {
+    background-color: #696969;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   }
+
+  
