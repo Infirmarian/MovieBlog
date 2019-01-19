@@ -37,11 +37,11 @@ class BlogForm extends React.Component{
 
 	newPost = () => {
 		const {movieTitle, movieReview, rating} = this.state;
-		if(title === ''){
+		if(movieTitle === ''){
 			alert('Title is empty');
 			return;
 		} 
-		if (content === ' ') {
+		if (movieReview === ' ') {
 			alert('Content is empty');
 			return;
 		}
@@ -62,13 +62,13 @@ class BlogForm extends React.Component{
 
 	}
 
-	function isValidRating(evt)
+	isValidRating(evt)
 	{
 		var charCode = (evt.which) ? evt.which : event.keyCode
 		if (charCode >= 48 && charCode <= 53)
 			return true;
 		return false;
-	}
+	};
 
 	render() {
 		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
