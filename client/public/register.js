@@ -5,14 +5,21 @@ function checkBlankAndValidate(u, p1, p2){
     var error = document.getElementById("error");
     if(u === ""){
         error.innerHTML = "Username must not be blank";
+        var popup = document.getElementById("error");
+        popup.classList.toggle("show");
         return false;
     }
     if(p1 === ""){
         error.innerHTML = "Password must not be blank";
+        var popup = document.getElementById("error");
+        popup.classList.toggle("show");
         return false;
     }
     if(p1 != p2){
+        
         error.innerHTML = "Passwords must match!";
+        var popup = document.getElementById("error");
+        popup.classList.toggle("show");
         return false;
     }
     return true;
@@ -22,6 +29,7 @@ form.onsubmit = function(){
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     var password2 = document.getElementById("password2").value;
+
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = () => {
@@ -34,6 +42,8 @@ form.onsubmit = function(){
                 if(resp.ErrorStatus === 1){
                     var error = document.getElementById("error");
                     error.innerHTML = "That username is taken, please choose another!" 
+                    var popup = document.getElementById("error");
+                    popup.classList.toggle("show");
                 }
             }
         }

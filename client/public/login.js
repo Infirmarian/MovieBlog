@@ -15,7 +15,9 @@ form.onsubmit = function() {
         if (xhttp.readyState == 4){
             if(xhttp.status == 403){
                 console.log(xhttp.responseText);
-                document.getElementById("wrongPassword").innerHTML = "Incorrect username or password!";
+                //document.getElementById("wrongPassword").innerHTML = "Incorrect username or password!";
+                var popup = document.getElementById("myPopup");
+                popup.classList.toggle("show");
                 document.getElementById("password").value = "";
             }else if(xhttp.status == 200){
                 // valid user
