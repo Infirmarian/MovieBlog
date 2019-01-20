@@ -4,36 +4,47 @@ const firebase = require('./firebase.js');
 
 var bodyParser = require("body-parser");
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+//app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.static(__dirname + '/public'));
+
+
+app.get("/express_backend", (req, res) => {
+    res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
+})
 
 /////////////////////////////////////////////////////
 /////// User authentication (login, logout, register)
 /////////////////////////////////////////////////////
+// Expected input: {"username":username, "password":password}
+// Output: {"ok":true, "access_token":token, "token_type":"bearer", "expires_in":int, "username":username}
 app.post("/auth/login", async (req, res) => {
     var hpwd = md5(req.body.password);
     var un = req.body.username.toLowerCase();
-    
-    const result = await firebase.validUser(un, hpwd);
-    if(result === 0){
-        console.log(`User ${un} logged in at ${new Date().toString()}`);
-        // OAUTH
-        var token =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        var exp = 3600;
-        firebase.addTempToken(token, un, exp);
+    try{
+        const result = await firebase.validUser(un, hpwd);
+        if(result === 0){
+            console.log(`User ${un} logged in at ${new Date().toString()}`);
+            // OAUTH
+            var token =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            var exp = 3600;
+            firebase.addTempToken(token, un, exp);
 
-        res.status(200).json({
-            "access_token":token,
-            "token_type":"bearer",
-            "expires_in":exp,
-            "username":un
-        });
-    }else{
-        console.log("Incorrect username and password");
-        res.status(403).json({"ErrorCode":"Invalid Request"});
+            res.status(200).json({
+                "access_token":token,
+                "token_type":"bearer",
+                "expires_in":exp,
+                "username":un,
+                "ok":true
+            });
+        }else{
+            console.log("Incorrect username and password");
+            res.status(403).json({"ok":false});
+        }
+    }catch (e){
+        console.log(`Error logging in user ${un}`);
     }
 });
 // register a new user
@@ -64,17 +75,36 @@ app.post("/auth/logout", async (req, res)=>{
 /////////////////////////////////////////////////////
 //////// Post Creation and Modification
 /////////////////////////////////////////////////////
-// Takes in a JSON object {"token":token, "title":title, "body":body, "imgURL":imgURL}
+// Expected input: {"token":token, "title":title, "body":body, "rating":2}
+// Output: {"ok":true, "ErrorCode":0, "ErrorMessage": "None"};
 app.post("/create_post", async (req, res) =>{
     var token = req.body.token;
     var auth_result = firebase.isValidToken(token)
     if(!auth_result.valid){
-        res.status(401).json({"ErrorCode":1, "ErrorMessage":"Invalid token was passed in, please log in again"})
+        res.status(401).json({"ok":false, "ErrorCode":1, "ErrorMessage":"Invalid token was passed in, please log in again"})
+        return;
     }
     var user = auth_result.username;
     var body = req.body.body;
-    var imgURL = req.body.imgURL;
-
+    var title = req.body.title;
+    var rating = req.body.rating;
+    try{
+    var result = await firebase.addReviewToDatabase(user, title, body, rating);
+    if(result != 0){
+        res.status(200).json({"ErrorCode":result, "ok":false, "ErrorMessage":"Unknown error"});
+    }else{
+        console.log(`Created post for user ${user} at ${new Date().toString()}`);
+        res.status(200).json({"ErrorCode":0,"ok":true, "ErrorMessage":""});
+    }
+    }catch(e){
+        console.log("Error creating new post: "+e);
+    } 
+});
+// get a post
+// {"token":token, "cursor":0}
+// {"posts":[{"title":title, "body":body, "rating":2}], "ok":true, "cursor":1}
+app.get("/get_post", async (req, res) =>{
+res.status(200).json({"ok":true, "posts":[{"title":"It's a wonderful life", "body":"Good movie, feeling happy/sad rn.", "rating":5}], "cursor":1});
 });
 
 

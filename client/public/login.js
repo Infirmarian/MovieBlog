@@ -38,9 +38,10 @@ form.onsubmit = function() {
     }else{
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
+        console.log(`Username:${username}`);
         xhttp.open("POST", "/auth/login", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(`username=${username}&password=${password}`);
+        xhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify({"username":username, "password":password}));
         return false;
     }
 };
