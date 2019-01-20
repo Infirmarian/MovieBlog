@@ -40,9 +40,9 @@ form.onsubmit = function(){
     };
 
     if(checkBlankAndValidate(username, password, password2)){
-        xhttp.open("POST", "/auth/register");
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(`username=${username}&password=${password}`);
+        xhttp.open("POST", "/auth/register", true);
+        xhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify({"username":username, "password":password}));
         return false;
     }else{
         document.getElementById("password").value = "";

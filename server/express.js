@@ -19,9 +19,8 @@ app.get("/express_backend", (req, res) => {
 /////// User authentication (login, logout, register)
 /////////////////////////////////////////////////////
 // Expected input: {"username":username, "password":password}
-// Output: {"access_token":token, "token_type":"bearer", "expires_in":int, "username":username}
+// Output: {"ok":true, "access_token":token, "token_type":"bearer", "expires_in":int, "username":username}
 app.post("/auth/login", async (req, res) => {
-    console.log(req.body.key);
     var hpwd = md5(req.body.password);
     var un = req.body.username.toLowerCase();
     try{
@@ -31,17 +30,18 @@ app.post("/auth/login", async (req, res) => {
             // OAUTH
             var token =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             var exp = 3600;
-            firebase.addTempToken(token, un, exp);
+            firebase.addTempToken(token, un, exp*1000);
 
             res.status(200).json({
                 "access_token":token,
                 "token_type":"bearer",
                 "expires_in":exp,
-                "username":un
+                "username":un,
+                "ok":true
             });
         }else{
             console.log("Incorrect username and password");
-            res.status(403).json({"ErrorCode":"Invalid Request"});
+            res.status(403).json({"ok":false});
         }
     }catch (e){
         console.log(`Error logging in user ${un}`);
@@ -79,9 +79,12 @@ app.post("/auth/logout", async (req, res)=>{
 // Output: {"ok":true, "ErrorCode":0, "ErrorMessage": "None"};
 app.post("/create_post", async (req, res) =>{
     var token = req.body.token;
-    var auth_result = firebase.isValidToken(token)
+    console.log(token);
+    const auth_result = await firebase.isValidToken(token)
+    console.log(auth_result);
     if(!auth_result.valid){
         res.status(401).json({"ok":false, "ErrorCode":1, "ErrorMessage":"Invalid token was passed in, please log in again"})
+        return;
     }
     var user = auth_result.username;
     var body = req.body.body;
@@ -89,23 +92,44 @@ app.post("/create_post", async (req, res) =>{
     var rating = req.body.rating;
     try{
     var result = await firebase.addReviewToDatabase(user, title, body, rating);
-    if(result != 0){
-        res.status(200).json({"ErrorCode":result, "ok":false, "ErrorMessage":"Unknown error"});
+    if(! result.ok){
+        res.status(200).json({"ErrorCode":1, "ok":false, "ErrorMessage":"Unknown error"});
     }else{
         console.log(`Created post for user ${user} at ${new Date().toString()}`);
         res.status(200).json({"ErrorCode":0,"ok":true, "ErrorMessage":""});
     }
     }catch(e){
-        console.log("Error creating new post: "+e);
+        console.error("Error creating new post: ", e);
     } 
 });
 // get a post
 // {"token":token, "cursor":0}
-// {"posts":[{"title":title, "body":body, "rating":2}], "ok":true, "cursor":1}
+// {"posts":[{"title":title, "body":body, "rating":2, "post_id":string}], "ok":true, "cursor":1}
 app.get("/get_post", async (req, res) =>{
-res.status(200).json({"ok":true, "posts":[{"title":"It's a wonderful life", "body":"Good movie, feeling happy/sad rn.", "rating":5}], "cursor":1});
+    // check for correct arguments
+    if(! ("token" in req.body) || ! ("cursor" in req.body)){
+        res.status(300).json({"ok":false, "ErrorMessage":"Required arguments 'token' or 'cursor' were not provided"});
+        return;
+    }
+    const valid = await firebase.isValidToken(req.body.token);
+    if(! valid.valid){
+        res.status(300).json({"ok":false, "ErrorMessage":"Invalid token received"});
+        return;
+    }
+    var posts = await firebase.getPosts(valid.username, req.body.cursor);
+    if(posts.ok){
+        res.status(200).json(posts);
+    }else{
+        console.log("Some error occurred");
+        res.status(300).json(posts);
+    }
 });
+// delete a post with a given ID
+// {"token":token, "post_id":id}
+// {"ok":true}
+app.get("/delete_post", async(req, res) =>{
 
+});
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}!`);
