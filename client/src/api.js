@@ -1,4 +1,4 @@
-const APIURL = '/posts';
+const addURL = '/create_post';
 const getURL = '/get_post';
 const throwError = async (resp) => {
     const unknownErr = { errorMessage: 'Unknown error' };
@@ -21,13 +21,14 @@ const getPosts = async () => {
     if (!resp.ok) {
         throwError(resp);
     } else {
+        console.log(resp.json());
         return resp.json();
     }
 };
 
 // TODO: Write a function that adds a new post to the database using a fetch
 const addPost = async (post) => {
-    const resp = await fetch(APIURL, {
+    const resp = await fetch(addURL, {
         method: 'post',
         headers: new Headers({
             'Content-Type': 'application/json'
@@ -37,10 +38,12 @@ const addPost = async (post) => {
     if(!resp.ok) {
         throwError(resp);
     }
+    console.log(resp.body);
+    return resp;
 };
 // TODO: Write a function that deletes a post from the database using a fetch
 const deletePost = async (postId) => {
-    const delURL = APIURL + '/' + postId;
+    const delURL = getURL + '/' + postId;
     const resp = await fetch(delURL, {
         method: 'delete'
     });

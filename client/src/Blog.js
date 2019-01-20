@@ -35,7 +35,7 @@ class Blog extends React.Component {
     }
 
     componentDidMount() {
-        this.loadPosts();
+        //this.loadPosts();
     }
 
     toggleForm() {

@@ -65,7 +65,7 @@ class BlogForm extends React.Component{
 	isValidNumber(evt) 
 	{
 		var charCode = (evt.which) ? evt.which : evt.keyCode
-		if (charCode >= 46 && charCode <= 53)
+		if (charCode >= 48 && charCode <= 53)
 			return true;
 		return false;
 	}
