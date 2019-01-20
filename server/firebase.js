@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const { FieldValue } = admin.firestore;
 
 
-var serviceAccount = require('/Users/geil/.ssh/firebaseKey.json');
+var serviceAccount = require('firebaseKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
