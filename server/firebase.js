@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const { FieldValue } = admin.firestore;
 
 // use command export NODE_PATH=$NODE_PATH:/Path/to/.ssh folder
-var serviceAccount = require('firebaseKey.json');
+var serviceAccount = require('C:/Users/miles/.ssh/firebaseKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

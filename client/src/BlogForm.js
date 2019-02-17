@@ -1,6 +1,7 @@
 import React from 'react';
 import './BlogForm.css';
 import * as api from './api';
+import { runInThisContext } from 'vm';
 
 //This is where user enters their data (popup where they specify movie, rating, etc)
 // TODO: add BlogForm component
@@ -8,7 +9,8 @@ import * as api from './api';
 const initState = {
 	movieTitle: '',
 	movieReview: '',
-	rating: 0
+	rating: 0,
+	myToken: "ri5lb0bpukelqzhd2jd6gf"
 }
 
 class BlogForm extends React.Component{
@@ -47,7 +49,8 @@ class BlogForm extends React.Component{
 		}
 
 		const newPost = {
-			movieTitle, 
+			token: this.state.myToken,
+			title: movieTitle, 
 			body: movieReview,
 			rating
 		};

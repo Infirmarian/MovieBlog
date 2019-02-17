@@ -16,18 +16,25 @@ const throwError = async (resp) => {
 };
 
 // TODO: Write a function that gets all of the posts from the database using a fetch
-const getPosts = async () => {
-    const resp = await fetch(getURL);
+const getPosts = async (auth) => {
+    const resp = await fetch(getURL,
+        {
+            method: 'get',
+            headers: new Headers({
+                "Content-Type":"application/json"
+            }),
+            body: JSON.stringify(auth)
+        });
     if (!resp.ok) {
         throwError(resp);
     } else {
-        console.log(resp.json());
-        return resp.json();
+        return resp;
     }
 };
 
 // TODO: Write a function that adds a new post to the database using a fetch
 const addPost = async (post) => {
+    console.log(post);
     const resp = await fetch(addURL, {
         method: 'post',
         headers: new Headers({

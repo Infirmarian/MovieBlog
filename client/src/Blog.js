@@ -45,9 +45,9 @@ class Blog extends React.Component {
         });
     }
 
-    async loadPosts() {
-        const posts = await api.getPosts();
-        this.setState({ posts });
+    async loadPosts() { //TODO: remove this fixed token
+        const response = await api.getPosts({"token":"ri5lb0bpukelqzhd2jd6gf", "cursor":0});
+        this.setState({ posts:response.json.posts });
     }
 
     deletePost = async (id) => {
