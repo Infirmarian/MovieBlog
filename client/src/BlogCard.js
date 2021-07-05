@@ -1,6 +1,7 @@
 import React from 'react';
 import './BlogCard.css';
 
+//this is the card that shows up on the main page (represents a movie review)
 class BlogCard extends React.Component {
     constructor(props){
         super(props);

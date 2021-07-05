@@ -6,8 +6,7 @@ class BlogIntro extends React.Component{
         return (
             <div>
                 <h2 className="intro-line">
-                	Welcome to Your Movie Reviews!
-                    //This is Joe Bruin's <span className="emo">Emotional</span> Blog.
+                	Welcome to <span className="emo">YOUR</span> Movie Reviews!
                 </h2>
             </div>
         );

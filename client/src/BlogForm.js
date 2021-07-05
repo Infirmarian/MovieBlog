@@ -1,6 +1,7 @@
 import React from 'react';
 import './BlogForm.css';
 import * as api from './api';
+import { runInThisContext } from 'vm';
 
 //This is where user enters their data (popup where they specify movie, rating, etc)
 // TODO: add BlogForm component
@@ -8,7 +9,8 @@ import * as api from './api';
 const initState = {
 	movieTitle: '',
 	movieReview: '',
-	rating: 0
+	rating: 0,
+	myToken: "ri5lb0bpukelqzhd2jd6gf"
 }
 
 class BlogForm extends React.Component{
@@ -37,17 +39,18 @@ class BlogForm extends React.Component{
 
 	newPost = () => {
 		const {movieTitle, movieReview, rating} = this.state;
-		if(title === ''){
+		if(movieTitle === ''){
 			alert('Title is empty');
 			return;
 		} 
-		if (content === ' ') {
+		if (movieReview === ' ') {
 			alert('Content is empty');
 			return;
 		}
 
 		const newPost = {
-			movieTitle, 
+			token: this.state.myToken,
+			title: movieTitle, 
 			body: movieReview,
 			rating
 		};
@@ -62,14 +65,13 @@ class BlogForm extends React.Component{
 
 	}
 
-	function isValidRating(evt)
+	isValidNumber(evt) 
 	{
-		var charCode = (evt.which) ? evt.which : event.keyCode
+		var charCode = (evt.which) ? evt.which : evt.keyCode
 		if (charCode >= 48 && charCode <= 53)
 			return true;
 		return false;
 	}
-
 	render() {
 		const onFocusHidePH = (e) => { e.target.placeholder = ''; };
         const titlePH = 'Movie Title';

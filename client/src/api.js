@@ -1,5 +1,5 @@
-const APIURL = '/posts';
-
+const addURL = '/create_post';
+const getURL = '/get_post';
 const throwError = async (resp) => {
     const unknownErr = { errorMessage: 'Unknown error' };
     try {
@@ -16,33 +16,52 @@ const throwError = async (resp) => {
 };
 
 // TODO: Write a function that gets all of the posts from the database using a fetch
+const getPosts = async (auth) => {
+    const resp = await fetch(getURL,
+        {
+            method: 'get',
+            headers: new Headers({
+                "Content-Type":"application/json"
+            }),
+            body: JSON.stringify(auth)
+        });
+    if (!resp.ok) {
+        throwError(resp);
+    } else {
+        return resp;
+    }
+};
 
 // TODO: Write a function that adds a new post to the database using a fetch
 const addPost = async (post) => {
-    const resp = await fetch(APIURL, {
+    console.log(post);
+    const resp = await fetch(addURL, {
         method: 'post',
         headers: new Headers({
             'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(post)
+        body: JSON.stringify(post)
         });
     if(!resp.ok) {
         throwError(resp);
     }
+    console.log(resp.body);
+    return resp;
 };
 // TODO: Write a function that deletes a post from the database using a fetch
-const deletePost = async (post) => {
-    const resp = await fetch(APIURL, {
+const deletePost = async (postId) => {
+    const delURL = getURL + '/' + postId;
+    const resp = await fetch(delURL, {
         method: 'delete'
-    })
-    .then(response => response.json());
-    if(!resp.ok) {
+    });
+
+    if (!resp.ok) {
         throwError(resp);
-    }
+    } 
 };
 
 export {
-    //getPosts,
+    getPosts,
     addPost,
-    // deletePost
+    deletePost
 };
